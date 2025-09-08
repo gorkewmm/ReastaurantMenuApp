@@ -6,9 +6,9 @@ import { useEffect } from 'react'
 const MealsOverviewScreen = ({ route, navigation }) => {
   const { categoryId } = route.params
 
-  const displayedMeals = MEALS.filter((e) => {
-    return e.categoryIds.indexOf(categoryId) >= 0 //categoryId’yi içeren yemeklerin array’i dönüyor.
-  })
+  const displayedMeals = MEALS.filter((e) => 
+    e.categoryIds.includes(categoryId) //categoryId’yi içeren yemeklerin array’i dönüyor.
+  )
 
   useEffect(() => {
     const category = CATEGORIES.find((e) => e.id === categoryId)
@@ -17,7 +17,8 @@ const MealsOverviewScreen = ({ route, navigation }) => {
       title: category.title,
       contentStyle: {
         backgroundColor: category.color
-      }
+      },
+      
     })
 
   }, [categoryId,navigation])
