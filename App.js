@@ -3,13 +3,15 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import {Ionicons} from "@expo/vector-icons"
+import { Ionicons } from "@expo/vector-icons"
 
 import CategoriesScreen from './screens/CategoriesScreen';
 import MealsOverviewScreen from './screens/MealsOverviewScreen';
 import MealDetailsScreen from './screens/MealDetailsScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
 import FavoritesContextProvider from './store/context/favorites-context';
+import { Provider } from 'react-redux';
+import { store } from './store/redux/store';
 
 
 
@@ -28,23 +30,23 @@ export default function App() {
         sceneStyle: {
           backgroundColor: "#4d3d32ff"
         },
-        drawerContentStyle:{
-          backgroundColor:  "#866553ff"
+        drawerContentStyle: {
+          backgroundColor: "#866553ff"
         },
-        drawerInactiveTintColor:"white",
-        drawerActiveTintColor:"#b1a199ff",
-        drawerActiveBackgroundColor : "#a58d7dff"
+        drawerInactiveTintColor: "white",
+        drawerActiveTintColor: "#b1a199ff",
+        drawerActiveBackgroundColor: "#a58d7dff"
       }} >
         <Drawer.Screen name="Categories" component={CategoriesScreen}
           options={{
             title: "All Categories",
-            drawerIcon: ({color,size}) => (<Ionicons name='list' color={color} size={size}/>)
-            
+            drawerIcon: ({ color, size }) => (<Ionicons name='list' color={color} size={size} />)
+
           }} />
-        <Drawer.Screen name="Favorites" component={FavoritesScreen} 
-        options={{
-          drawerIcon: ({color,size}) => (<Ionicons name='star' color={color} size={size}/>)
-        }}
+        <Drawer.Screen name="Favorites" component={FavoritesScreen}
+          options={{
+            drawerIcon: ({ color, size }) => (<Ionicons name='star' color={color} size={size} />)
+          }}
         />
       </Drawer.Navigator>)
   }
@@ -53,41 +55,43 @@ export default function App() {
     <>
       <StatusBar style='light' />
 
-      <FavoritesContextProvider>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{
-          headerStyle: {
-            backgroundColor: "#866553ff"
-          },
-          headerTintColor: "white",
-          contentStyle: {
-            backgroundColor: "#4d3d32ff"
-          }
-        }} >
-          <Stack.Screen
-            name='Drawer'
-            component={DrawerNavigator}
-            options={{
-               headerShown:false
-            }}
+      {/* <FavoritesContextProvider> */}
+      <Provider store={store} >
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{
+            headerStyle: {
+              backgroundColor: "#866553ff"
+            },
+            headerTintColor: "white",
+            contentStyle: {
+              backgroundColor: "#4d3d32ff"
+            }
+          }} >
+            <Stack.Screen
+              name='Drawer'
+              component={DrawerNavigator}
+              options={{
+                headerShown: false
+              }}
             />
-          <Stack.Screen
-            name='MealsOverview'
-            component={MealsOverviewScreen}
-          />
-          <Stack.Screen
-            name='DetailMeal'
-            component={MealDetailsScreen}
-            options={{
-              title: "About the Meal"
-            }}
+            <Stack.Screen
+              name='MealsOverview'
+              component={MealsOverviewScreen}
+            />
+            <Stack.Screen
+              name='DetailMeal'
+              component={MealDetailsScreen}
+              options={{
+                title: "About the Meal"
+              }}
 
-          />
+            />
 
-        </Stack.Navigator>
+          </Stack.Navigator>
 
-      </NavigationContainer>
-      </FavoritesContextProvider>
+        </NavigationContainer>
+      </Provider>
+      {/* </FavoritesContextProvider> */}
 
     </>
   );

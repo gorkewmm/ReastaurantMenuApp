@@ -1,20 +1,29 @@
 import { Button, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import SaveMeal from "../components/SaveMeal"
-import { FavoritesContext } from '../store/context/favorites-context'
+import { useDispatch, useSelector } from 'react-redux'
+import { addFavorite, removeFavorite } from '../store/redux/favorites'
+// import { FavoritesContext } from '../store/context/favorites-context'
 
 const MealDetailsScreen = ({ route, navigation }) => {
   const { relatedMeal } = route.params
+  // const favoriteMealsCtx = useContext(FavoritesContext)
+  const favoriteMealIds = useSelector((state) => state.favoriteMeals.ids)
+  const dispatch = useDispatch()
 
-  const favoriteMealsCtx = useContext(FavoritesContext)
-
-  const mealIsFavorite = favoriteMealsCtx.ids.includes(relatedMeal.id)
+  // const mealIsFavorite = favoriteMealsCtx.ids.includes(relatedMeal.id)
+  const mealIsFavorite = favoriteMealIds.includes(relatedMeal.id)
 
   function changeFavoriteStatusHandler(){
+    // if (mealIsFavorite){
+    //   favoriteMealsCtx.removeFavorite(relatedMeal.id)
+    // }else{
+    //   favoriteMealsCtx.addFavorite(relatedMeal.id)
+    // }
     if (mealIsFavorite){
-      favoriteMealsCtx.removeFavorite(relatedMeal.id)
+      dispatch(removeFavorite({id: relatedMeal.id}))
     }else{
-      favoriteMealsCtx.addFavorite(relatedMeal.id)
+      dispatch(addFavorite({id: relatedMeal.id}))
     }
   }
 

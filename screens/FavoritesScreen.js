@@ -4,11 +4,16 @@ import { FavoritesContext } from '../store/context/favorites-context'
 import { MEALS } from '../data/dummy-data'
 import MealItem from '../components/MealItem'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch, useSelector } from 'react-redux'
+import { clearAllFavoriteMeals } from '../store/redux/favorites'
 
 const FavoritesScreen = ({ navigation }) => {
-  const favoritesCtx = useContext(FavoritesContext)
+  // const favoritesCtx = useContext(FavoritesContext)
+  const favMealIds = useSelector((state) => state.favoriteMeals.ids)
+  const dispatch = useDispatch()
+
   const favMeals = MEALS.filter((e) =>
-    favoritesCtx.ids.includes(e.id)
+    favMealIds.includes(e.id) //MEAL arreyindeki idleri tek tek gezip, bu idlerden favMealIds arreyinde bulunan MEAL'leri favMeals'e atadım
   )
 
   function addNewFavoriteHandler() {
@@ -23,11 +28,19 @@ const FavoritesScreen = ({ navigation }) => {
     })
   }
 
-  useEffect(() =>{
-    navigation.setOptions ({
-      headerRight: () => <MaterialCommunityIcons onPress={favoritesCtx.clearAllFavoriteMeals} style={styles.deleteIcon} name="delete" color="#000" size={24} />,
-    })}
-    ,[navigation, favoritesCtx.ids])
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <Pressable onPress={()=>dispatch(clearAllFavoriteMeals())}>
+        <MaterialCommunityIcons
+          style={styles.deleteIcon}
+          name="delete"
+          color="#000"
+          size={24}
+        />
+      </Pressable>,
+    })
+  }
+    , [navigation])
 
 
   if (favMeals.length === 0) {
@@ -93,8 +106,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#b6a057ff",
     padding: 20,
   },
-  deleteIcon:{
-    marginRight:10
+  deleteIcon: {
+    marginRight: 10
   }
 
 })
